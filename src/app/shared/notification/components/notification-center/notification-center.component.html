@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="container-header">
+        <h2 mat-dialog-title>Центр уведомлений</h2>
+        <button mat-button
+                (click)="removeAllNotifications$.next()">
+            Архивировать все
+        </button>
+    </div>
+    <mat-dialog-content>
+        <mat-nav-list>
+            <mat-list-item class="container-list-item"
+                           *ngFor="let notification of notifications$ | async | slice: -4; let i = index">
+                <div class="notification-text">
+                    {{ notification.messageText}}
+                </div>
+                <button class="close"
+                        mat-icon-button
+                        (click)="removeNotification$.next(i)">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-dialog-content>
+</div>

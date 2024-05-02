@@ -1,0 +1,23 @@
+<section class="main">
+    <div class="container">
+        <form class="main-form"
+              [formGroup]="messageForm"
+              (ngSubmit)="sendMessageBtnClick$.next()">
+            <mat-form-field>
+                <mat-label>Введите текст сообщения</mat-label>
+                <input matInput
+                       type="text"
+                       formControlName="messageText">
+                <mat-error *ngIf="messageForm?.get('messageText')?.invalid">Поле не должно быть пустым</mat-error>
+            </mat-form-field>
+            <button class="sendBtn"
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    [disabled]="messageForm.invalid">
+                Отправить
+            </button>
+        </form>
+    </div>
+</section>
+<app-notification></app-notification>

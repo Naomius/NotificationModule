@@ -1,0 +1,19 @@
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .container {
+
+        .main-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            mat-form-field {
+                width: 250px;
+            }
+        }
+    }
+}

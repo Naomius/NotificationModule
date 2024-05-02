@@ -1,52 +1,62 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationComponent } from './notification.component';
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { WebSocketService } from "../services/webSocket/web-socket.service";
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { of } from 'rxjs';
+import { Store, StoreModule } from '@ngrx/store';
+import {BehaviorSubject, from, of} from 'rxjs';
 import {CustomSnackBarComponent} from "./components/custom-snack-bar/custom-snack-bar.component";
 
 describe('NotificationComponent', () => {
     let component: NotificationComponent;
     let fixture: ComponentFixture<NotificationComponent>;
-    let webSocketServiceStub: Partial<WebSocketService>;
-    let snackBarSpy: any;
+
+    let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
 
     beforeEach(() => {
-        webSocketServiceStub = {
-            Notification: of({ messageText: 'Test Message' })
-        };
-
-        snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['openFromComponent']);
-
         TestBed.configureTestingModule({
-            declarations: [ NotificationComponent ],
+            declarations: [NotificationComponent, CustomSnackBarComponent],
             providers: [
-                { provide: MatSnackBar, useValue: snackBarSpy },
-                { provide: WebSocketService, useValue: webSocketServiceStub }
+                {
+                    provide: MatSnackBar,
+                    useValue: {
+                        openFromComponent: jasmine.createSpy('openFromComponent')
+                    }
+                },
             ],
-            schemas: [NO_ERRORS_SCHEMA]
+            imports: [
+                StoreModule.forRoot({})
+            ]
         }).compileComponents();
-
+        snackBarSpy = TestBed.inject(MatSnackBar) as jasmine.SpyObj<MatSnackBar>;
+        snackBarSpy.openFromComponent.and.callThrough(); // Ensure the spy is active
         fixture = TestBed.createComponent(NotificationComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
+        component = TestBed.createComponent(NotificationComponent).componentInstance;
     });
 
-    it('should create', () => {
+    afterEach(() => {
+        component.ngOnDestroy();
+    });
+
+    it('should create the component', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should open snackbar with correct message', () => {
-        component.initializedSideEffects();
-        expect(snackBarSpy.openFromComponent).toHaveBeenCalledWith(
-            CustomSnackBarComponent,
-            {
-                data: 'Test Message',
-                duration: 5000,
-                horizontalPosition: 'center',
-                verticalPosition: 'top'
-            }
-        );
+    it('should unsubscribe from the observable on destroy', () => {
+        spyOn(component.destroy$, 'next');
+
+        component.ngOnDestroy();
+
+        expect(component.destroy$.next).toHaveBeenCalledWith(true);
+    });
+
+    it('should call openFromComponent with correct parameters when openSnackBar is called', () => {
+        const testMessage = 'Test Message';
+        component.openSnackBar(testMessage);
+
+        expect(snackBarSpy.openFromComponent).toHaveBeenCalledWith(CustomSnackBarComponent, {
+            data: { messageText: testMessage },
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+        });
     });
 });

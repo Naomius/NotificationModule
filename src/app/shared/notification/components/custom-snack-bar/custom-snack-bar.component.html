@@ -1,0 +1,11 @@
+@if (snakeBarData$ | async; as snakeBarData) {
+    <div class="custom-snackbar">
+        <div class="title">{{snakeBarData.title | uppercase}}</div>
+        <div class="message">{{ snakeBarData.message }}</div>
+        <div class="date">{{ snakeBarData.date | date: 'dd.MM.yyyy HH:mm' }}</div>
+        <button mat-icon-button class="close" (click)="closeSnakeBarBtnClick$.next()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+}
+
