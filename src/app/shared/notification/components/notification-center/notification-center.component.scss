@@ -1,0 +1,25 @@
+.container {
+
+    .container-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        background: #91a0a9;
+        border-bottom: 1px solid #333;
+        box-shadow: 0 0 5px 3px rgb(86 86 86 / 30%);
+
+        button {
+            margin: 0 20px 14px 0
+        }
+    }
+
+    .container-list-item {
+        .close {
+            visibility: hidden;
+        }
+
+        &:hover .close {
+            visibility: visible;
+        }
+    }
+}

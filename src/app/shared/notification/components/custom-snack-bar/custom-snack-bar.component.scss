@@ -1,0 +1,36 @@
+.custom-snackbar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 300px;
+
+    .close {
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    &:hover {
+        .close {
+            visibility: visible;
+        }
+    }
+
+    .title {
+        font-weight: bold;
+        margin: 0 auto;
+    }
+
+    .message {
+        margin: 10px 0 10px 0;
+    }
+
+    .date {
+        align-self: flex-end;
+        opacity: 0.6;
+    }
+}
+//.custom-snackbar:hover .close {
+//    display: block;
+//}
