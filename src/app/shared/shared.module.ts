@@ -11,7 +11,6 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {MatDialogContent, MatDialogModule} from "@angular/material/dialog";
 import {MatListItem, MatNavList} from "@angular/material/list";
 
-
 @NgModule({
     declarations: [],
     imports: [
